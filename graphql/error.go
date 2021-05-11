@@ -2,7 +2,7 @@ package graphql
 
 import (
 	"context"
-	"errors"
+	//"errors"
 
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
@@ -17,12 +17,12 @@ func ErrorOnPath(ctx context.Context, err error) error {
 	if err == nil {
 		return nil
 	}
-	var gqlerr *gqlerror.Error
-	if errors.As(err, &gqlerr) {
-		if gqlerr.Path == nil {
-			gqlerr.Path = GetPath(ctx)
-		}
-		return gqlerr
-	}
+	//var gqlerr *gqlerror.Error
+	//if errors.As(err, &gqlerr) {
+	//	if gqlerr.Path == nil {
+	//		gqlerr.Path = GetPath(ctx)
+	//	}
+	//	return gqlerr
+	//}
 	return gqlerror.WrapPath(GetPath(ctx), err)
 }
