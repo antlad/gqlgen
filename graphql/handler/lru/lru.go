@@ -4,17 +4,18 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	lru "github.com/hashicorp/golang-lru/v2"
+
+	lru "github.com/hashicorp/golang-lru"
 )
 
 type LRU struct {
-	lru *lru.Cache[string, any]
+	cache *lru.Cache
 }
 
 var _ graphql.Cache = &LRU{}
 
 func New(size int) *LRU {
-	cache, err := lru.New[string, any](size)
+	cache, err := lru.New(size)
 	if err != nil {
 		// An error is only returned for non-positive cache size
 		// and we already checked for that.
@@ -24,9 +25,9 @@ func New(size int) *LRU {
 }
 
 func (l LRU) Get(ctx context.Context, key string) (value interface{}, ok bool) {
-	return l.lru.Get(key)
+	return l.cache.Get(key)
 }
 
 func (l LRU) Add(ctx context.Context, key string, value interface{}) {
-	l.lru.Add(key, value)
+	l.cache.Add(key, value)
 }
